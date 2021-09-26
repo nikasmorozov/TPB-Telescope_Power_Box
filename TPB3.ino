@@ -11,8 +11,8 @@ int heater_pin2 = 5;
 int heater_pin3 = 9;
 int thermistorPin1 = 1;
 int thermistorPin2 = 5;
-int temperatureOverDP = 20;
-int delayBtwReadings = 2000;
+int temperatureOverDP = 3;
+int delayBtwReadings = 5000;
 
 //Variables
 int chk;
@@ -24,7 +24,7 @@ float R1 = 10000;
 float logR2, R2, T, Tc1, Tc2, dewPoint;
 float c1 = 1.009249522e-03, c2 = 2.378405444e-04, c3 = 2.019202697e-07;
 
-int heaterCyclePercent1;
+int heaterCyclePercent1, heaterCyclePercent2;
 
 int heaterCycle1, heaterCycle2;
 
@@ -61,11 +61,11 @@ void loop() {
  analogWrite(heater_pin1, heaterCycle2);
   analogWrite(heater_pin3, heaterCycle1);
   
-//  DC
-  analogWrite(heater_pin2, 255);
+//  DC, currently set to OFF
+  analogWrite(heater_pin2, 0);
 
   heaterCyclePercent1 = map(heaterCycle1, 0, 255, 0, 100);
-  
+  heaterCyclePercent2 = map(heaterCycle2, 0, 255, 0, 100);
 
 //Prints temp and humidity values to serial monitor
    Serial.print("Temp: ");
@@ -88,11 +88,14 @@ void loop() {
   Serial.print(heaterCycle1);
   Serial.println(")");
   
-  Serial.print("Probe 2: "); 
+  Serial.print("Probe 2: ");
   Serial.print(Tc2);
   Serial.print(" C");
   Serial.print(", Heater Cycle 2: ");
-  Serial.println(heaterCycle2);
+  Serial.print(heaterCyclePercent2);
+  Serial.print("% (8bit: ");
+  Serial.print(heaterCycle2);
+  Serial.println(")");
 
   Serial.println();
 
